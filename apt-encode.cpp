@@ -1,5 +1,5 @@
 // apt-encode: Encode images as APT audio signals
-// Copyright (C) 2020  Gokberk Yaltirakli
+// 2020  Gokberk Yaltirakli
 //
 // This program is free software: you can redistribute it and/or modify it under
 // the terms of the GNU Affero General Public License as published by the Free

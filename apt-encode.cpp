@@ -36,7 +36,7 @@ template <typename T> constexpr T max(T val1, T val2) {
 
 constexpr size_t CARRIER = 2400;
 constexpr size_t BAUD = 4160;
-constexpr size_t OVERSAMPLE = 9;
+constexpr size_t OVERSAMPLE = 3;
 
 constexpr const char *SYNCA = "000011001100110011001100110011000000000";
 constexpr const char *SYNCB = "000011100111001110011100111001110011100";
@@ -108,10 +108,15 @@ void write_value(uint8_t value) {
 }
 
 int main(int argc, char **argv) {
-  (void)argc;
+  // TODO: Improve command line argument parsing
+
+  if (argc < 2) {
+    printf("Usage: %s ./image1.pgm ./image2.pgm\n", argv[0]);
+    return 1;
+  }
 
   Image img1(argv[1]);
-  Image img2(argv[2]);
+  Image img2(argv[argc < 3 ? 1 : 2]);
 
   auto height = max(img1.height(), img2.height());
   for (size_t line = 0; line < height; line++) {

@@ -69,7 +69,7 @@ Image::Image(const char *path) {
     fread(buf, 1, 2, f);
   }
 
-  fscanf(f, "%lu %lu %lu", &width, &m_height, &maxValue);
+  fscanf(f, "%zu %zu %zu", &width, &m_height, &maxValue);
 
   m_pixels = (uint8_t *)malloc(width * m_height);
 

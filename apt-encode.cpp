@@ -137,7 +137,7 @@ int main(int argc, char **argv) {
       write_value(0);
 
     // Image A
-    for (size_t i = 0; i < 909; i++) {
+    for (size_t i = 0; i < img1.width(); i++) {
       if (line < img1.height())
         write_value(img1.getPixel(i, line));
       else
@@ -150,7 +150,7 @@ int main(int argc, char **argv) {
       auto v = 0;
       if (wedge < 8) {
         wedge++;
-        v = (int)(255.0 * ((wedge % 8) / 8.0));
+        v = (int)(255.0 * (wedge % 8 / 8.0));
       }
       write_value(v);
     }
@@ -164,7 +164,7 @@ int main(int argc, char **argv) {
       write_value(255);
 
     // Image B
-    for (size_t i = 0; i < 909; i++) {
+    for (size_t i = 0; i < img2.width(); i++) {
       if (line < img2.height())
         write_value(img2.getPixel(i, line));
       else
@@ -177,7 +177,7 @@ int main(int argc, char **argv) {
       auto v = 0;
       if (wedge < 8) {
         wedge++;
-        v = (int)(255.0 * ((wedge % 8) / 8.0));
+        v = (int)(255.0 * (wedge % 8 / 8.0));
       }
       write_value(v);
     }

@@ -36,9 +36,7 @@ APT encoder
 
    The program needs pictures encoded in the PGM format [1]. You can use an
    image editor, such as GIMP, in order to create these files. The format needed
-   by the program is P2, also known as the 'Text' encoding of PGM. Please note
-   that some image encoders might put a comment line that starts with '#'. You
-   will need to remove that with a text editor before using the program.
+   by the program is P2, also known as the 'Text' encoding of PGM.
 
    The images will need to have a width of 909 pixels, and they can have any
    height. The program can handle images of different heights. If two images

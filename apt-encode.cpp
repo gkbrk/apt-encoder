@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+#include <assert.h>
 #include <math.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -55,31 +56,66 @@ public:
   size_t width() const;
   size_t height() const;
 
+  void load();
+
 private:
+  void skipComment();
+
+  FILE *m_file;
   size_t m_height;
   uint8_t *m_pixels;
 };
 
-Image::Image(const char *path) {
-  FILE *f = fopen(path, "r");
-  size_t maxValue;
-  size_t width;
+Image::Image(const char *path) { m_file = fopen(path, "r"); }
 
-  // P2
+void Image::load() {
+  skipComment();
+
+  // Read the file type: P2 + newline
   {
-    char buf[2];
-    fread(buf, 1, 2, f);
+    char buf[3];
+    fread(buf, 1, 3, m_file);
+    assert(buf[0] == 'P');
+    assert(buf[1] == '2');
+    assert(buf[2] == '\n');
   }
+  skipComment();
 
-  fscanf(f, "%zu %zu %zu", &width, &m_height, &maxValue);
+  size_t maxValue, width;
 
-  m_pixels = (uint8_t *)malloc(width * m_height);
+  // TODO: Support resizing images using a simple algoritm
+  fscanf(m_file, "%zu", &width);
+  assert(width == 909 && "Images should have the width of 910");
+  skipComment();
+
+  fscanf(m_file, "%zu", &m_height);
+  skipComment();
+
+  // TODO: Use maxValue to normalize colours
+  fscanf(m_file, "%zu", &maxValue);
+  skipComment();
+
+  m_pixels = (uint8_t *)malloc(width * m_height * sizeof(uint8_t));
 
   for (size_t i = 0; i < m_height * width; i++) {
-    fscanf(f, "%hhu", &m_pixels[i]);
+    fscanf(m_file, "%hhu", &m_pixels[i]);
+    skipComment();
   }
 
-  fclose(f);
+  fclose(m_file);
+}
+
+void Image::skipComment() {
+  // Check if this is the beginning of a comment. If the current character is
+  // #, read until we reach a newline.
+  int ch = fgetc(m_file);
+
+  if (ch != '#') {
+    ungetc(ch, m_file);
+  } else {
+    while (fgetc(m_file) != '\n')
+      ;
+  }
 }
 
 void Image::free() { std::free(m_pixels); }
@@ -123,6 +159,9 @@ int main(int argc, char **argv) {
 
   Image img1(argv[1]);
   Image img2(argv[argc < 3 ? 1 : 2]);
+
+  img1.load();
+  img2.load();
 
   auto height = max(img1.height(), img2.height());
   for (size_t line = 0; line < height; line++) {
